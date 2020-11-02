@@ -164,7 +164,7 @@ while True:
         
     elif command == 'upgrade':
         print('installing NEW_VERSION.zip on MainKane folder...')
-        subprocess.call("curl https://lorenzomari.netlify.app/Kane_2.0.zip -o NEW_VERSION.zip", shell = True)
+        subprocess.call("curl https://github.com/umanochiocciola/kane/archive/main.zip -o NEW_VERSION.zip", shell = True)
         
     elif 'cd' in command:
         if command.replace("cd","") == '..':
