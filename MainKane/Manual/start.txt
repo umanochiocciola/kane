@@ -1,0 +1,20 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          start
+change <placeholder> with an argument
+
+Usage:
+	start <full_directory_path>\<filename.xxx>
+	start <file>
+
+Types of argument:
+	Full path of a file
+	While giving a path, you can use * to referr to the current directory
+	Just the name of a file in the directory
+
+Example:
+	start pong.py
+	start C:\MainKane\pong.py
+	start *\gamez\pong.py

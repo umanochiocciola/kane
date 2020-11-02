@@ -1,0 +1,18 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                         py   -    python
+change <placeholder> with an argument
+
+Usage:
+	py <function/command>
+
+Types of argument:
+	python one-line script
+
+Example:
+	py print('hello world')
+
+Note:
+	variables and imported modules are stored temporally

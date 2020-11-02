@@ -1,0 +1,15 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          web
+change <placeholder> with an argument
+
+Usage:
+	web <url>
+
+Types of argument:
+	url of a website
+
+Example:
+	web https://duckduckgo.com

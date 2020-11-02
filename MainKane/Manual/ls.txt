@@ -1,0 +1,18 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          ls
+change <placeholder> with an argument
+
+Usage:
+	ls
+	ls <file_extention>
+
+Types of argument:
+	none
+	extention of a file
+
+Example:
+	ls
+	ls txt

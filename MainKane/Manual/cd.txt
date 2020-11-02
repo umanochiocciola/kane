@@ -1,0 +1,28 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          cd
+change <placeholder> with an argument
+
+Usage:
+	cd <directory>
+
+Types of argument:
+	Full path of a directory
+	(While giving a path, you can use * to referr to the current directory)
+   OR
+	cd.. to go back
+		ex:
+			C:\Users\marx\Desktop ## HappyUser:> cd..
+			C:\Users\marx ## HappyUser:> 
+
+Example:
+	cd C:\Users\marx\Desktop
+	cd *\Desktop
+	cd..
+
+Please DO NOT use \ at the end of a path like C:\
+End with the name of a dirctory like C: instead
+
+Note: cd will not verify the path, so you're able to set as directory a random world. Be carefull
