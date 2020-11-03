@@ -30,7 +30,7 @@ def cd_punto(tin):
 
 dir = str(pathlib.Path().absolute())
 passw = ''
-elp = "Kane 2.0 terminal manual: \n list of internal commands\n\n start:  open a program \n !quit: quit terminal \n web open a URL in browser\n !helpKane OR !help:  get this list ;)\n cd: jump to a directory\n dir OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directory\n makedir <dir>: create a directory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
+elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n !quit: quit terminal \n web open a URL in browser\n !helpKane OR !help:  get this list ;)\n cd: jump to a directory\n dir OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directory\n makedir <dir>: create a directory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
 
 username = input('$ Username: ')
 if os.path.exists(f'{dir}/users/{username}'):
@@ -60,6 +60,9 @@ while True:
     
     if command == '':
         continue
+    
+    if command == 'wiki':
+        webopen('https://github.com/umanochiocciola/kane/wiki')
     
     if command == 'quit' or command == '!quit':
         sys.exit()
