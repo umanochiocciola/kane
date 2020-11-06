@@ -52,7 +52,7 @@ else:
     with open(f'{directory}/users/{username}/UserData.dat', 'wb') as f:
         pk.dump([passw, LAST_CHACKED], f, protocol=2)
 
-if LAST_CHACKED != 'DATE':
+if LAST_CHACKED != DATE:
     print('+==================+')
     print('|Daily update check|')
     print('+==================+\n')
