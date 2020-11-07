@@ -134,7 +134,7 @@ while True:
                 with open(f"{directory}/{command.replace('read ')}") as f:
                     print(f.read())
         except:
-            print(f'Unable to open {command.replace('read ', '')}')
+            print(f"Unable to open {command.replace('read ', '')}")
 
     elif 'start ' in command:
         try:
