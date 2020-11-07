@@ -13,7 +13,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHACKED = DATE
 
-version = '2.0.9.3'
+version = '2.0.9.4'
 
 if os.name == 'posix':
     monnezza = ';'
