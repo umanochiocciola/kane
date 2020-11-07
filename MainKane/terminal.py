@@ -15,6 +15,13 @@ LAST_CHACKED = DATE
 
 version = '2.0.9.3'
 
+if os.name == 'posix':
+    monennezza = ';'
+    cs = 'clear'
+else:
+    monnexx = '&'
+    cs = 'cls'
+
 try:
     import ctypes
     ctypes.windll.kernel32.SetConsoleTitleW(f"Kane terminal {version}")
@@ -127,8 +134,8 @@ while True:
                 with open(f"{directory}/{command.replace('read ')}") as f:
                     print(f.read())
         except:
-            1+1
-    
+            print(f'Unable to open {command.replace('read ', '')}')
+
     elif 'start ' in command:
         try:
             os.startfile(directory + '/' + command.replace('start ', '').replace('*', directory))
@@ -137,6 +144,8 @@ while True:
                 os.startfile(command.replace('start ', '').replace('*', directory))
             except:
                 print('file not found')
+    elif command == 'cs':
+        subprocess.call(cs, shell=True)
     
     elif command == 'password' or command == 'pwd':
         print(f'Changing password for {user}')
@@ -238,7 +247,8 @@ while True:
     else:
         ab = InternalCommands.get(command, 'fuc')
         if ab == 'fuc':
-            subprocess.call(f'cd {directory}&{command}', shell=True)
+            subprocess.call(f'cd {directory}{monnezza}{command}', shell=True)
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
+
