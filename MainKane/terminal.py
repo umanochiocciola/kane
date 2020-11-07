@@ -16,10 +16,10 @@ LAST_CHACKED = DATE
 version = '2.0.9.3'
 
 if os.name == 'posix':
-    monennezza = ';'
+    monnezza = ';'
     cs = 'clear'
 else:
-    monnexx = '&'
+    monnezza = '&'
     cs = 'cls'
 
 try:
