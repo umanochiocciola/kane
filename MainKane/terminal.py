@@ -71,7 +71,8 @@ if LAST_CHACKED != DATE:
     print(f'Your version: {version}')
     print(f'Latest version avaiable: {latest}\n')
     
-    print('If you want to update, use the   upgrade   command')
+    if version != latest: print('If you want to update, use the   upgrade   command')
+    else: print('Congrats! You have the latest version')
     LAST_CHACKED = DATE
 
 with open(f'{str(pathlib.Path().absolute())}/users/{username}/UserData.dat', 'wb') as f:
