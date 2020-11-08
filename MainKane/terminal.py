@@ -13,7 +13,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHACKED = DATE
 
-version = '2.0.9.4'
+version = '2.0.9.5'
 
 if os.name == 'posix':
     monnezza = ';'
@@ -72,6 +72,10 @@ if LAST_CHACKED != DATE:
     print(f'Latest version avaiable: {latest}\n')
     
     print('If you want to update, use the   upgrade   command')
+    LAST_CHACKED = DATE
+
+with open(f'{str(pathlib.Path().absolute())}/users/{username}/UserData.dat', 'wb') as f:
+        pk.dump([passw, LAST_CHACKED], f, protocol=2)
 
 InternalCommands = {
     'test': "print('it works!')",
@@ -98,6 +102,7 @@ def spin():
 user = username
 
 while True:
+    
     directory = directory.replace('\\', '/')
     command = input(directory + ' ## ' + user +'$~ ')
     
