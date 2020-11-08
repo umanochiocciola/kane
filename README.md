@@ -23,5 +23,3 @@ What's Kane?
 Open Source Notes:
 	This is a full open source. This means than you have free access to the project and its source code.
 	If you paid for this pretend a refund!
-	To contribute to this project either with ideas or python code feel free to send me that at lorenzomari22@gmail.com
-	For minor updates, news and tips visit lorenzomari.netlify.app/Kane.html
