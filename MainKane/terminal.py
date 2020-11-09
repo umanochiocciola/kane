@@ -13,14 +13,17 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHACKED = DATE
 
-version = '2.0.9.5'
+version = '2.0.9.6'
 
+sys_host = 'unknown'
 if os.name == 'posix':
     monnezza = ';'
     cs = 'clear'
+    sys_host = 'unix'
 else:
     monnezza = '&'
     cs = 'cls'
+    sys_host = 'windows/DOS'
 
 try:
     import ctypes
@@ -85,8 +88,7 @@ InternalCommands = {
     'scream': "scream()",
     'gimmeh comics': "import antigravity",
     'cake': "print('You really need me to tell you that EVERY cake is a lie?')",
-    "lemme see": "dir()",
-    "spin!": "spin()"
+    "spin!": "print('weeeeee')"
 }
 
 '''geeky stuff'''
@@ -96,8 +98,6 @@ def scream():
     except:
         print("sorry, apparently this doesn't work on your main OS")
 
-def spin():
-    print('weeeeee')
 '''bicos ies'''
 
 user = username
@@ -121,9 +121,18 @@ while True:
             requ = command.replace('package install ', '')
             subprocess.call(f"cd Pakages&git clone https://github.com/{requ}.git", shell = True)
     
+    elif 'lemme see' in command:
+        if command[0:10] == 'lemme see':
+            for i in dir():
+                if not 'elp' in i:
+                    if 'all' in command:
+                        print(f'{i}: {globals()[i]}')
+                    elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
+                        print(f'{i}: {globals()[i]}')
+    
     elif 'file' in command:
         try:
-            if command[0] + command[1] + command[2] + command[3] == 'file':
+            if command[0:4] == 'file':
                 tg = command.replace('file ', '')
                 try:
                     open(f'{directory}/{tg}', 'x')
@@ -134,7 +143,7 @@ while True:
         except:
             1+1
     
-    if 'read ' in command:
+    elif 'read ' in command:
         try:
             if command[0] + command[1] + command[2] + command[3] == 'read':
                 with open(f"{directory}/{command.replace('read ')}") as f:
