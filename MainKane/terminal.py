@@ -13,7 +13,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHACKED = DATE
 
-version = '2.0.9.6'
+version = '2.0.9.6.5'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -44,7 +44,7 @@ def cd_punto(tin):
             build += boi
     return(tin.replace('/' + build, ''))
 
-directory = str(pathlib.Path().absolute())
+root = directory = str(pathlib.Path().absolute()).replace('\\', '/')
 passw = ''
 elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n quit: quit terminal \n web open a URL in browser\n !helpKane OR help:  get this list ;)\n cd: jump to a directoryectory\n directory OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directoryectory\n makedirectory <directory>: create a directoryectory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
 
@@ -105,6 +105,10 @@ user = username
 while True:
     
     directory = directory.replace('\\', '/')
+    if 'users/' in directory and not user in directory:
+        print(f"Access denied: property of {directory.replace(f'{root}/users', '')}")
+        directory = f'{root}/users'
+    
     command = input(directory + ' ## ' + user +'$~ ')
     
     if command == '':
@@ -252,7 +256,7 @@ while True:
         else:
             directory = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
             
-    elif len(command)>=2 and command[0] == 'p' and command[1] == 'y':
+    elif len(command)>=2 and command[0:2] == 'py':
         try:
             exec(command.replace('py ', ''))
         except:
