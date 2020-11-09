@@ -100,9 +100,13 @@ def scream():
 
 '''bicos ies'''
 
-user = username
+user = backup = username
 
 while True:
+    
+    if username != user:
+        print(f'User discrepancy detected: restoring latest authorized user ({backup})')
+        user = username = backup
     
     directory = directory.replace('\\', '/')
     if 'users/' in directory and not user in directory:
