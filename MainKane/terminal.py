@@ -11,9 +11,9 @@ from datetime import date
 
 today = date.today()
 DATE = today.strftime("%d/%m/%Y")
-LAST_CHACKED = DATE
+LAST_CHECKED = DATE
 
-version = '2.0.9.7'
+version = '2.0.9.6.5'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -51,7 +51,7 @@ elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to g
 username = input('$ Username: ')
 if os.path.exists(f'{directory}/users/{username}'):
     with open(f'{directory}/users/{username}/UserData.dat', 'rb') as f:
-        passw, LAST_CHACKED = pk.load(f)
+        passw, LAST_CHECKED = pk.load(f)
     if passw != '':
         while input(f'{username}\'s password: ') != passw:
             print('wrong password.\n')
@@ -60,9 +60,9 @@ else:
     print('creating user...')
     os.makedirs(f'{directory}/users/{username}')
     with open(f'{directory}/users/{username}/UserData.dat', 'wb') as f:
-        pk.dump([passw, LAST_CHACKED], f, protocol=2)
+        pk.dump([passw, LAST_CHECKED], f, protocol=2)
 
-if LAST_CHACKED != DATE:
+if LAST_CHECKED != DATE:
     print('+==================+')
     print('|Daily update check|')
     print('+==================+\n')
@@ -76,10 +76,10 @@ if LAST_CHACKED != DATE:
     
     if version != latest: print('If you want to update, use the   upgrade   command')
     else: print('Congrats! You have the latest version')
-    LAST_CHACKED = DATE
+    LAST_CHECKED = DATE
 
 with open(f'{str(pathlib.Path().absolute())}/users/{username}/UserData.dat', 'wb') as f:
-        pk.dump([passw, LAST_CHACKED], f, protocol=2)
+        pk.dump([passw, LAST_CHECKED], f, protocol=2)
 
 InternalCommands = {
     'test': "print('it works!')",
@@ -170,7 +170,7 @@ while True:
         print(f'Changing password for {user}')
         passw = input('$:>')
         with open(f'{directory}/users/{username}/UserData.dat', 'wb') as f:
-            pk.dump([passw, LAST_CHACKED], f, protocol=2)
+            pk.dump([passw, LAST_CHECKED], f, protocol=2)
             print(f'saved succesfully!\n')
         
             
@@ -226,14 +226,14 @@ while True:
             passw = '' 
             os.makedirs(f'{str(pathlib.Path().absolute())}/users/{user}')
             with open(f'{str(pathlib.Path().absolute())}/users/{user}/UserData.dat', 'wb') as f:
-                pk.dump([passw, LAST_CHACKED], f, protocol=2)
+                pk.dump([passw, LAST_CHECKED], f, protocol=2)
                 print(f'{user} folder created succesfully!!')
         else:
             with open(f'{str(pathlib.Path().absolute())}/users/{user}/UserData.dat', 'wb') as f:
-                passw, LAST_CHACKED = pk.load(f)
+                passw, LAST_CHECKED = pk.load(f)
         try:
             with open('UserData.dat', 'wb') as f:
-                pk.dump([passw, LAST_CHACKED], f, protocol=2)
+                pk.dump([passw, LAST_CHECKED], f, protocol=2)
                 print(f'saved succesfully!')
             if passw != '':
                 if input(f'{user}\'s password: ') == passw:
