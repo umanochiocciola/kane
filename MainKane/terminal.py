@@ -104,8 +104,11 @@ user = backup = username
 
 while True:
     
+    if backup != username:
+        print(f'User discrepancy detected: restoring last authorized user ({username})')
+        backup = username
     if username != user:
-        print(f'User discrepancy detected: restoring latest authorized user ({backup})')
+        print(f'User discrepancy detected: restoring last authorized user ({backup})')
         user = username = backup
     
     directory = directory.replace('\\', '/')
@@ -223,18 +226,6 @@ while True:
     elif command == 'update':
         subprocess.call("pip install pygame", shell = True)
         
-    elif command == 'username':
-        print('KaneTerminal.setup: Insert username')
-        user = input('$> ')
-        if not os.path.exists(f'{str(pathlib.Path().absolute())}/users/{user}'):
-            passw = '' 
-            os.makedirs(f'{str(pathlib.Path().absolute())}/users/{user}')
-            with open(f'{str(pathlib.Path().absolute())}/users/{user}/UserData.dat', 'wb') as f:
-                pk.dump([passw, LAST_CHECKED], f, protocol=2)
-                print(f'{user} folder created succesfully!!')
-        else:
-            with open(f'{str(pathlib.Path().absolute())}/users/{user}/UserData.dat', 'wb') as f:
-                passw, LAST_CHECKED = pk.load(f)
         try:
             with open('UserData.dat', 'wb') as f:
                 pk.dump([passw, LAST_CHECKED], f, protocol=2)
