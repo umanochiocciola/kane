@@ -13,7 +13,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.6.1'
+version = '2.0.9.7'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -23,7 +23,7 @@ if os.name == 'posix':
 else:
     monnezza = '&'
     cs = 'cls'
-    sys_host = 'windows/DOS'
+    sys_host = 'win/DOS'
 
 try:
     import ctypes
@@ -33,7 +33,7 @@ except:
 print('\nPress fn+f11 to toggle fullscreen')
 
 def webopen(tin):
-    webbrowser.open(tin, new=1)
+    webbrowser.open(tin)
     
 def cd_punto(tin):
     build = ''
@@ -111,12 +111,14 @@ while True:
         print(f'User discrepancy detected: restoring last authorized user ({backup})')
         user = username = backup
     
+    command = input(directory + ' ## ' + user +'$~ ')
+    amand = command.split()
+    prom = amand[0]
+    
     directory = directory.replace('\\', '/')
     if 'users/' in directory and not user in directory:
         print(f"Access denied: property of {directory.replace(f'{root}/users', '')}")
         directory = f'{root}/users'
-    
-    command = input(directory + ' ## ' + user +'$~ ')
     
     if command == '':
         continue
@@ -127,47 +129,42 @@ while True:
     elif command == 'quit' or command == '!quit':
         sys.exit()
     
-    elif 'pkg ' in command:
+    elif prom == 'pkg':
         if ' install ' in command:
-            requ = command.replace('package install ', '')
+            requ = command.replace('pkg install ', '')
             subprocess.call(f"cd Pakages&git clone https://github.com/{requ}.git", shell = True)
     
-    elif 'lemme see' in command:
-        if command[0:10] == 'lemme see':
-            for i in dir():
-                if not 'elp' in i:
-                    if 'all' in command:
-                        print(f'{i}: {globals()[i]}')
-                    elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
-                        print(f'{i}: {globals()[i]}')
+    elif prom == 'lemme see':
+        for i in dir():
+            if not 'elp' in i:
+                if 'all' in command:
+                    print(f'{i}: {globals()[i]}')
+                elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
+                    print(f'{i}: {globals()[i]}')
     
-    elif 'file' in command:
+    elif prom == 'file':
+
+        tg = amand[1]
         try:
-            if command[0:4] == 'file':
-                tg = command.replace('file ', '')
-                try:
-                    open(f'{directory}/{tg}', 'x')
-                    print(f'created {tg}')
-                except:
-                    print('[Kane Error 3] unable to create file')
-                continue
+            open(f'{directory}/{tg}', 'x')
+            print(f'created {tg}')
         except:
-            1+1
+            print('[Kane Error 3] unable to create file')
+        continue
     
-    elif 'read ' in command:
+    elif prom == 'read':
         try:
-            if command[0] + command[1] + command[2] + command[3] == 'read':
-                with open(f"{directory}/{command.replace('read ')}") as f:
-                    print(f.read())
+            with open(f"{directory}/{command.replace('read ')}") as f:
+                print(f.read())
         except:
             print(f"Unable to open {command.replace('read ', '')}")
 
-    elif 'start ' in command:
+    elif prom == 'start':
         try:
-            os.startfile(directory + '/' + command.replace('start ', '').replace('*', directory))
+            os.startfile(directory + '/' + amand[1].replace('*', directory))
         except:
             try:
-                os.startfile(command.replace('start ', '').replace('*', directory))
+                os.startfile(amand[1].replace('*', directory))
             except:
                 print('file not found')
     elif command == 'cs':
@@ -181,8 +178,8 @@ while True:
             print(f'saved succesfully!\n')
         
             
-    elif 'makedir' in command:
-        dar = command.replace('makedir ', '')
+    elif prom == 'makedir':
+        dar = amand[1]
         if not '/' in dar:
             dar = f'{directory}/{dar}'
         if not os.path.exists(dar):
@@ -192,8 +189,8 @@ while True:
     elif command == 'home':
         directory = f'{str(pathlib.Path().absolute())}/users/{user}'
     
-    elif 'man ' in command:
-        com = command.replace("man ","")
+    elif prom == 'man':
+        com = amand[1]
         try:
             man = open(f'Manual/{com}.txt', 'r')
             print(man.read())
@@ -205,18 +202,18 @@ while True:
         for file in glob.glob(f'{directory}/*'):
             print(file.replace(f'{directory}', '').replace(directory.replace('/', '\\'), ''))
             
-    elif 'dir ' in command:
-        arg = command.replace('directory ', '')
+    elif prom == 'dir':
+        arg = amand[1]
         for file in glob.glob(f'{directory}*.{arg}'):
             print(file.replace(f'{directory}', ''))
             
-    elif 'ls ' in command:
-        arg = command.replace('ls ', '')
+    elif prom == 'ls':
+        arg = amand[1]
         for file in glob.glob(f'{directory}/*.{arg}'):
             print(file.replace(f'{directory}/', '').replace(directory.replace('/', '\\') + '/', ''))
             
-    elif 'web ' in command:
-        we = command.replace("web ", "")
+    elif prom == 'web':
+        we = amand[1]
         try:
             webopen(we)
             print(f'opening {we} ...')
@@ -251,7 +248,7 @@ while True:
         else:
             directory = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
             
-    elif len(command)>=2 and command[0:2] == 'py':
+    elif prom == 'py':
         try:
             exec(command.replace('py ', ''))
         except:
@@ -265,4 +262,3 @@ while True:
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
-
