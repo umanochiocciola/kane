@@ -49,8 +49,8 @@ passw = ''
 elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n quit: quit terminal \n web open a URL in browser\n !helpKane OR help:  get this list ;)\n cd: jump to a directoryectory\n directory OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directoryectory\n makedirectory <directory>: create a directoryectory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
 
 username = input('$ Username: ')
-if os.path.exists(f'{directory}/users/{username}'):
-    with open(f'{directory}/users/{username}/UserData.dat', 'rb') as f:
+if os.path.exists(f'{directory}/usrs/{username}'):
+    with open(f'{directory}/usrs/{username}/UserData.dat', 'rb') as f:
         passw, LAST_CHECKED = pk.load(f)
     if passw != '':
         while input(f'{username}\'s password: ') != passw:
@@ -58,8 +58,8 @@ if os.path.exists(f'{directory}/users/{username}'):
         print('Welcome')
 else:
     print('creating user...')
-    os.makedirs(f'{directory}/users/{username}')
-    with open(f'{directory}/users/{username}/UserData.dat', 'wb') as f:
+    os.makedirs(f'{directory}/usrs/{username}')
+    with open(f'{directory}/usrs/{username}/UserData.dat', 'wb') as f:
         pk.dump([passw, LAST_CHECKED], f, protocol=2)
 
 if LAST_CHECKED != DATE:
@@ -78,7 +78,7 @@ if LAST_CHECKED != DATE:
     else: print('Congrats! You have the latest version')
     LAST_CHECKED = DATE
 
-with open(f'{str(pathlib.Path().absolute())}/users/{username}/UserData.dat', 'wb') as f:
+with open(f'{str(pathlib.Path().absolute())}/usrs/{username}/UserData.dat', 'wb') as f:
         pk.dump([passw, LAST_CHECKED], f, protocol=2)
 
 InternalCommands = {
@@ -116,9 +116,9 @@ while True:
     prom = amand[0]
     
     directory = directory.replace('\\', '/')
-    if 'users/' in directory and not user in directory:
-        print(f"Access denied: property of {directory.replace(f'{root}/users', '')}")
-        directory = f'{root}/users'
+    if 'usrs/' in directory and not user in directory:
+        print(f"Access denied: property of {directory.replace(f'{root}/usrs', '')}")
+        directory = f'{root}/usrs'
     
     if command == '':
         continue
@@ -154,7 +154,7 @@ while True:
     
     elif prom == 'read':
         try:
-            with open(f"{directory}/{command.replace('read ')}") as f:
+            with open(f"{directory}/{command.replace('read ', '')}") as f:
                 print(f.read())
         except:
             print(f"Unable to open {command.replace('read ', '')}")
@@ -173,7 +173,7 @@ while True:
     elif command == 'password' or command == 'pwd':
         print(f'Changing password for {user}')
         passw = input('$:>')
-        with open(f'{directory}/users/{username}/UserData.dat', 'wb') as f:
+        with open(f'{directory}/usrs/{username}/UserData.dat', 'wb') as f:
             pk.dump([passw, LAST_CHECKED], f, protocol=2)
             print(f'saved succesfully!\n')
         
@@ -187,7 +187,7 @@ while True:
             print(f'{dar} succesfully created!')
     
     elif command == 'home':
-        directory = f'{str(pathlib.Path().absolute())}/users/{user}'
+        directory = f'{str(pathlib.Path().absolute())}/usrs/{user}'
     
     elif prom == 'man':
         com = amand[1]
