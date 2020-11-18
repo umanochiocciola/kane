@@ -3,7 +3,8 @@
 Version: 2.0.9
 __________________________________________________
 WARNING
-For users updating kane from 2.0.9.7 to 2.0.9.7.1
+For users updating kane from 2.0.9.7 to 2.0.9.7.1:
+
 RENAME "users" FOLDER IN "usrs"
 __________________________________________________
 
