@@ -1,4 +1,5 @@
 import subprocess
+import socket
 import sys
 import pathlib
 import webbrowser
@@ -98,6 +99,22 @@ def scream():
     except:
         print("sorry, apparently this doesn't work on your main OS")
 
+def invia_comandi(s, comando):
+    s.send(comando.encode())
+    data = s.recv(4096)
+    print(data.decode())
+    print("Killing connection...")
+    s.close()
+
+def conn_sub_server(indirizzo_server, richie):
+    try:
+        s = socket.socket()
+        s.connect(indirizzo_server)
+        print(f"Succesfully connected to { indirizzo_server }")
+        invia_comandi(s, richie)
+    except socket.error as errore:
+        print(f"Connection error \n{errore}")
+        
 '''bicos ies'''
 
 user = backup = username
@@ -128,6 +145,19 @@ while True:
     
     elif command == 'quit' or command == '!quit':
         sys.exit()
+    
+    elif prom == 'stream':
+        try:
+            if amand[1] == 'connect':
+                indi = amand[2].split(':')
+                indi.append(1000)
+                conn_sub_server((indi[0], int(indi[1])), amand[3])
+            elif amand[1] == 'serve':
+                amand.append(1000)
+                subprocess.call(f'python3 {amand[2]} {amand[3]}')
+        except:
+            print('correct usage: stream connect ip:port request\n') 
+        
     
     elif prom == 'pkg':
         if ' install ' in command:
