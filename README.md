@@ -16,6 +16,8 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+    Version 2.0.7.2 - networking -
+    Added stream services: use and host simple servers
     Version 2.0.9.6.1  - internal security -
     Added protection to user's home folder. Only that user can access it
     Added user verification: you were able to switch user without verification with py user='TargetUserName', now Kane will check for discrepancies in usernames
