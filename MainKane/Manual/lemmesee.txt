@@ -2,16 +2,16 @@
 |                      -Kane Manual-                        |
 +===========================================================+
 
-                          lemme see
+                          lemmesee
 change <placeholder> with an argument
 
 Usage:
-	lemme see <option>
+	lemmesee <option>
 
 Types of argument:
 	none
 	all
 
 Example:
-	lemme see
-	lemme see all
+	lemmesee
+	lemmesee all
