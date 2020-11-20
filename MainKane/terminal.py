@@ -164,7 +164,7 @@ while True:
             requ = command.replace('pkg install ', '')
             subprocess.call(f"cd Pakages&git clone https://github.com/{requ}.git", shell = True)
     
-    elif (prom == 'lemme') and (amand[1] == 'see)':
+    elif prom == 'lemmesee':
         for i in dir():
             if not 'elp' in i:
                 if 'all' in command:
