@@ -1,0 +1,23 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          stream
+change <placeholder> with an argument
+
+Usage:
+	client
+	    stream connect <ip>:<port> <request>
+            if no oprt is provided, stream will use port 1000
+	
+	server:
+	    this is not implemented yet, but you have an example at /stream
+
+Types of argument:
+	ip and port of server targhet
+	request with no spaces
+	
+
+Example:
+	stream connect 127.0.0.1:1234 test
+	stream connect 127.0.0.1 test

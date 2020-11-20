@@ -1,0 +1,17 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          lemme see
+change <placeholder> with an argument
+
+Usage:
+	lemme see <option>
+
+Types of argument:
+	none
+	all
+
+Example:
+	lemme see
+	lemme see all
