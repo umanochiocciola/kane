@@ -14,7 +14,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.2'
+version = '2.0.9.7.4'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -127,20 +127,18 @@ while True:
     if username != user:
         print(f'User discrepancy detected: restoring last authorized user ({backup})')
         user = username = backup
-    
-    command = input(directory + ' ## ' + user +'$~ ')
-    amand = command.split()
-    prom = amand[0]
-    
+
     directory = directory.replace('\\', '/')
     if 'usrs/' in directory and not user in directory:
         print(f"Access denied: property of {directory.replace(f'{root}/usrs', '')}")
         directory = f'{root}/usrs'
     
-    if command == '':
-        continue
+    command = input(directory + ' ## ' + user +'$~ ')
+    if command == '': continue
+    amand = command.split()
+    prom = amand[0]
     
-    elif command == 'wiki':
+    if command == 'wiki':
         webopen('https://github.com/umanochiocciola/kane/wiki')
     
     elif command == 'quit' or command == '!quit':
@@ -292,3 +290,4 @@ while True:
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
+
