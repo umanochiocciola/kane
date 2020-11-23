@@ -3,8 +3,7 @@ import sys
 
 banca = {
     'test': 'it works!',
-    'help': 'to get kane assistance, type help in your terminal\nto get stream client help type man stream\nto get stream serving help... well that\'s coming soon :P',
-    'random_ascii_art': "    .\n /\\ /|\n((.Y(!\n \\ |/\n /  6~6,\n \\ _    +-.\n  \\`-=--^-'\n   \\ \\ "
+    'help': 'to get kane assistance, type help in your terminal\nto get stream client help type man stream\nto get stream serving help... well that\'s coming soon :P'
 }
 def ricevi_comandi(conn):
     richiesta = conn.recv(4096)
