@@ -14,7 +14,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.4'
+version = '2.0.9.7.5'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -117,10 +117,16 @@ def conn_sub_server(indirizzo_server, richie):
         
 '''bicos ies'''
 
+collegamenti = {}
+dummy = ''
+try:
+    with open(f'shortcuts.dat', 'rb') as f:
+        collegamenti, dummy = pk.load(f)
+except: 0
+
 user = backup = username
 
 while True:
-    
     if backup != username:
         print(f'User discrepancy detected: restoring last authorized user ({username})')
         backup = username
@@ -143,6 +149,15 @@ while True:
     
     elif command == 'quit' or command == '!quit':
         sys.exit()
+    
+    elif command in collegamenti:
+        subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
+        
+    elif prom == 'short':
+        faccherini = amand[2].split(',')
+        collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
+        with open(f'shortcuts.dat', 'wb') as f:
+            pk.dump([collegamenti, ''], f, protocol=2)
     
     elif prom == 'stream':
         try:
