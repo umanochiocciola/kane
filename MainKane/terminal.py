@@ -283,13 +283,21 @@ while True:
         subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
         print('\nDone. Overwrite /kane/MainKane files on your MainKane folder.')
         
-    elif 'cd' in command:
+    elif 'cd ' in command:
         if command.replace("cd","") == '..':
             directory = cd_punto(directory)
         elif '/' in command:
-            directory = command.replace("cd ","").replace("*", directory)
+            ghen = command.replace("cd ","").replace("*", directory)
+            if os.path.exists(ghen):
+                directory = ghen
+            else:
+                print(f'can\'t jump to {ghen} : directory doesn\'t exist')
         else:
-            directory = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
+            ghen = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
+            if os.path.exists(ghen):
+                directory = ghen
+            else:
+                print(f'can\'t jump to {ghen} : directory doesn\'t exist')
             
     elif prom == 'py':
         try:
