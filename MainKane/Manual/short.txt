@@ -1,0 +1,17 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          short
+change <placeholder> with an argument
+
+Usage:
+	short <name> <directory>,<program execution command>
+
+Types of argument:
+	how do you want to name th shortcut
+	directory where target file is placed
+	execution command of target file
+
+Example:
+	short lol C:/MainKane,python3 lol.py

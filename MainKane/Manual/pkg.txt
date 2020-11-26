@@ -1,0 +1,16 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          package
+change <placeholder> with an argument
+
+Usage:
+	pkg <author>/<package name>
+
+Types of argument:
+	author of a package
+	package name
+
+Example:
+	package umanochiocciola/platformer
