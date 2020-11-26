@@ -313,8 +313,9 @@ while True:
         ab = InternalCommands.get(command, 'fuc')
         if ab == 'fuc':
             plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-            if plot.stderr == '':
-                print(plot.stdout)
+            if plot.stderr == b'':
+                subprocess.call(f'cd {directory}{monnezza}{command}', shell=True)
+                print(f'output: {str(plot.stdout)}')
             else:
                 print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system')
         else:
