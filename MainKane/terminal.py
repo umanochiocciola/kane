@@ -308,11 +308,15 @@ while True:
         except:
             print('\n\n+=====================================+\n')
             traceback.print_exc(limit=None, file=None, chain=True)
-            print('\n+=====================================+\n')
+            print('\n+=======================================+\n')
     else:
         ab = InternalCommands.get(command, 'fuc')
         if ab == 'fuc':
-            subprocess.call(f'cd {directory}{monnezza}{command}', shell=True)
+            plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+            if plot.stderr == '':
+                print(plot.stdout)
+            else:
+                print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system')
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
