@@ -282,6 +282,9 @@ while True:
         print('installing new version on /kane')
         subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
         print('\nDone. Overwrite /kane/MainKane files on your MainKane folder.')
+        print('\n')
+        with open(f"{root}/kane/README.txt") as f:
+                print(f.read())
         
     elif 'cd' in command:
         if command.replace("cd","") == '..':
