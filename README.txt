@@ -16,6 +16,7 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+    @ *fixed syshost commands
     @ Finally, cd will check if the directory exists
     @ Added shortcuts
    # Version 2.0.7.2 - networking -
