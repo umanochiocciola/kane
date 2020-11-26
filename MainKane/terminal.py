@@ -154,7 +154,7 @@ while True:
         subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
         
     elif prom == 'short':
-        faccherini = amand[2].split(',')
+        faccherini = command.replace('short ', '').replace(amand[1]+' ', '').split(',')
         collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
         with open(f'shortcuts.dat', 'wb') as f:
             pk.dump([collegamenti, ''], f, protocol=2)
@@ -179,7 +179,7 @@ while True:
     
     elif prom == 'lemmesee':
         for i in dir():
-            if not 'elp' in i:
+            if not ('elp' in i or i == 'backup'):
                 if 'all' in command:
                     print(f'{i}: {globals()[i]}')
                 elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
