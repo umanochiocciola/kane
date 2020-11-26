@@ -16,14 +16,16 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
-    Added shortcuts
-    Version 2.0.7.2 - networking -
-    Added stream services: use and host simple servers
-    Version 2.0.9.6.1  - internal security -
-    Added protection to user's home folder. Only that user can access it
-    Added user verification: you were able to switch user without verification with py user='TargetUserName', now Kane will check for discrepancies in usernames
-    Improved 'lemme see' command: now it gives you a list of active variables in the program
-    With 'lemme see all' it will also show functions(with memory adress) and modules
+    @ Finally, cd will check if the directory exists
+    @ Added shortcuts
+   # Version 2.0.7.2 - networking -
+    @ Added stream services: use and host simple servers
+   # Version 2.0.9.6.1  - internal security -
+    @ Added protection to user's home folder. Only that user can access it
+    @ Added user verification: you were able to switch user without verification with py user='TargetUserName',
+      now Kane will check for discrepancies in usernames
+    @ Improved 'lemme see' command: now it gives you a list of active variables in the program
+      With 'lemme see all' it will also show functions(with memory adress) and modules
 	
 
 Sintax:
