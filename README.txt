@@ -10,7 +10,7 @@ __________________________________________________
 
 Setup:
     To correctly setup Kane on windows I suggest to place the MainKane folder directly in the C: directory. This makes all easier ;)
-    You can than create a shortcut to the terminal in the startup folder
+    You can then create a shortcut to the terminal in the startup folder
     C:\Users\%username%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
     To get the full geek experience press fn+f11 to make the terminal window full screen
     On linux, I suggest to place MainKane in /home folder. 
