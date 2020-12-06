@@ -9,6 +9,7 @@ import pickle as pk
 import traceback
 import urllib.request
 from datetime import date
+import shutil
 
 today = date.today()
 DATE = today.strftime("%d/%m/%Y")
@@ -47,7 +48,7 @@ def cd_punto(tin):
 
 root = directory = str(pathlib.Path().absolute()).replace('\\', '/')
 passw = ''
-elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n quit: quit terminal \n web open a URL in browser\n !helpKane OR help:  get this list ;)\n cd: jump to a directoryectory\n directory OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directoryectory\n makedirectory <directory>: create a directoryectory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
+elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n quit: quit terminal \n web open a URL in browser\n !helpKane OR help:  get this list ;)\n cd: jump to a directory\n dir OR ls: list files in the folder\nupgrade: Upgrade kane version\n man: read further informations about a command\n makedir: create a directory at the specified path.\n py: execute python line\n home: jump to home user folder\n While giving a path, you can use * to referr to the current directory"
 
 username = input('$ Username: ')
 if os.path.exists(f'{directory}/usrs/{username}'):
@@ -114,7 +115,10 @@ def conn_sub_server(indirizzo_server, richie):
         invia_comandi(s, richie)
     except socket.error as errore:
         print(f"Connection error \n{errore}")
-        
+
+
+def move(org, dest):
+    shutil.move(org, dest)
 '''bicos ies'''
 
 collegamenti = {}
@@ -125,6 +129,26 @@ try:
 except: 0
 
 user = backup = username
+
+#####################################################
+'''    USER  CONFIGURATION   FILE      '''
+
+show_stder = None
+reprint_stdout = None
+do_input_log = None
+do_stderr_log = None
+
+
+try:
+    with open('sysconfig.conf', 'r') as f:
+        for i in f.readlines():
+            try: exec(i)
+            except: print(f'error in sysconfig.conf:\n{i}\n moving on...')
+
+except:
+    print('Unable to find sysconfig.conf')
+
+#####################################################
 
 while True:
     if backup != username:
@@ -143,6 +167,9 @@ while True:
     if command == '': continue
     amand = command.split()
     prom = amand[0]
+    if do_input_log:    
+        with open('InputLog.txt', 'a') as f:
+            f.write(command)
     
     if command == 'wiki':
         webopen('https://github.com/umanochiocciola/kane/wiki')
@@ -153,6 +180,9 @@ while True:
     elif command in collegamenti:
         subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
         
+    elif prom == 'search':
+        webopen(f"https://html.duckduckgo.com/html?q={command.replace('search ', '')}")
+    
     elif prom == 'short':
         faccherini = command.replace('short ', '').replace(amand[1]+' ', '').split(',')
         collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
@@ -278,13 +308,29 @@ while True:
         except:
             print('[Kane error 2]: Error while saving data. Please reboot Kane or install it again.')
         
-    elif command == 'upgrade':
+    elif prom == 'upgrade':
         print('installing new version on /kane')
-        subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
-        print('\nDone. Overwrite /kane/MainKane files on your MainKane folder.')
-        print('\n')
+        if len(amand) >1:
+            if amand[1] == 'git': subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
+            elif amand[1] == 'curl': subprocess.call('curl -LO https://github.com/umanochiocciola/kane/archive/main.zip')
+        else:
+            subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
+        
+        print('\nDone. Overwriting old files...')
+        
         with open(f"{root}/kane/README.txt") as f:
-                print(f.read())
+                chanf = f.read()
+        tag = cd_punto(root)
+        try:
+            shutil.copy('kane/MainKane', tag)
+            print('deleting useless files...')  
+            shutil.rmtree(r'kane')
+            print(f'+==========================================================+\n{chanf}\n+==========================================================+')
+        except:
+            print(f'+==========================================================+\n{chanf}\n+==========================================================+')
+            print('Warning: you are not executing kane as admin.\n Kane won\'n be able to overwrite file. To apply the update, overwrite kane/MainKane files in your original Mainkane folder.')
+        
+        print('done.\n')
         
     elif 'cd' in command:
         if command.replace("cd","") == '..':
@@ -315,8 +361,10 @@ while True:
             plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
             if plot.stderr == b'':
                 subprocess.call(f'cd {directory}{monnezza}{command}', shell=True)
-                print(f'output: {str(plot.stdout)}')
+                if reprint_stdout: print(f'output: {str(plot.stdout)}')
             else:
+                if show_stderr:
+                    print(str(plot.stderr))
                 print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system')
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
