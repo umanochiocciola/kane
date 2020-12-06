@@ -15,7 +15,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.7-'
+version = '2.0.9.7.6*'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -133,11 +133,11 @@ user = backup = username
 #####################################################
 '''    USER  CONFIGURATION   FILE      '''
 
-show_stder = None
+show_stderr = None
 reprint_stdout = None
 do_input_log = None
 do_stderr_log = None
-
+greeting = ''
 
 try:
     with open('sysconfig.conf', 'r') as f:
@@ -149,6 +149,8 @@ except:
     print('Unable to find sysconfig.conf')
 
 #####################################################
+
+print(greeting)
 
 while True:
     if backup != username:
@@ -365,7 +367,7 @@ while True:
             else:
                 if show_stderr:
                     print(str(plot.stderr))
-                print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system')
+                print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system\nOR\nAn error occurred while executing {command}')
         else:
             exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
