@@ -1,6 +1,6 @@
 Kane
 
-Version: 2.0.9
+Version: 2.0.9.7
 __________________________________________________
 WARNING
 For users updating kane from before 2.0.9.7:
