@@ -16,10 +16,15 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+   # Version 2.0.9.7.7-
+    @ added sysconfig options to tweak around yor kane.
+     (when updating, if you want to keep thoose tweaks don't overwrite it ;] )
+    @ Improced syshost command management, now I have more control over stderr and stdout of your main os' commands
+   # Version 2.0.9.7.3 -> 6
     @ *fixed syshost commands
     @ Finally, cd will check if the directory exists
     @ Added shortcuts
-   # Version 2.0.7.2 - networking -
+   # Version 2.0.9.7.2 - networking -
     @ Added stream services: use and host simple servers
    # Version 2.0.9.6.1  - internal security -
     @ Added protection to user's home folder. Only that user can access it
