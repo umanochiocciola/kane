@@ -16,6 +16,8 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+   # Version 2.0.8.7.7
+    @ now kane is a python function: kanescript coming soon
    # Version 2.0.9.7.7-
     @ added sysconfig options to tweak around yor kane.
      (when updating, if you want to keep thoose tweaks don't overwrite it ;] )
