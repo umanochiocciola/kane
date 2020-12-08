@@ -14,7 +14,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.7-'
+version = '2.0.9.7.7'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -129,218 +129,230 @@ user = backup = username
 ################################################################
 '''                 Config                      '''
 
+attributes = {}
+
+
 try:
     with open('sysconfig.conf', 'r') as f:
         for i in f.readlines():
-            exec(i)
+            try: exec(f'attributes.update({i})')
+            except:
+                try: exec(i)
+                except:
+                    try: pull(i)
+                    except: 0
 
 except:
     print('error while opening sysconfig.conf')
     with open('sysconfig.conf', 'x') as f:
         f.write('# edit this to configurate your kane os\nshow_stderr = 0\nreprint_stdout = 0\ndo_input_log = 0')
-    show_stderr = 0
-    reprint_stdout = 0
-    do_input_log = 0
+    attributes.update({show_stderr: 0, do_input_log: 0})
     
 ################################################################
 
-while True:
-    if backup != username:
-        print(f'User discrepancy detected: restoring last authorized user ({username})')
-        backup = username
-    if username != user:
-        print(f'User discrepancy detected: restoring last authorized user ({backup})')
-        user = username = backup
+def pull(command):
+    global backup, username, user, colegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, directory, syshost, cs, monnezza
+    
+    for matteobandiera in [0]:
+        if backup != username:
+            print(f'User discrepancy detected: restoring last authorized user ({username})')
+            backup = username
+        if username != user:
+            print(f'User discrepancy detected: restoring last authorized user ({backup})')
+            user = username = backup
 
-    directory = directory.replace('\\', '/')
-    if 'usrs/' in directory and not user in directory:
-        print(f"Access denied: property of {directory.replace(f'{root}/usrs', '')}")
-        directory = f'{root}/usrs'
-    
-    command = input(directory + ' ## ' + user +'$~ ')
-    if command == '': continue
-    amand = command.split()
-    prom = amand[0]
-    
-    with open('input_log', 'a') as f:
-        f.write(command)
-    
-    if command == 'wiki':
-        webopen('https://github.com/umanochiocciola/kane/wiki')
-    
-    elif command == 'quit' or command == '!quit':
-        sys.exit()
-    
-    elif command in collegamenti:
-        subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
+        directory = directory.replace('\\', '/')
+        if 'usrs/' in directory and not user in directory:
+            print(f"Access denied: property of {directory.replace(f'{root}/usrs', '')}")
+            directory = f'{root}/usrs'
+
+        if command == '': continue
+        amand = command.split()
+        prom = amand[0]
         
-    elif prom == 'short':
-        faccherini = command.replace('short ', '').replace(amand[1]+' ', '').split(',')
-        collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
-        with open(f'shortcuts.dat', 'wb') as f:
-            pk.dump([collegamenti, ''], f, protocol=2)
-    
-    elif prom == 'stream':
-        try:
-            if amand[1] == 'connect':
-                indi = amand[2].split(':')
-                indi.append(1000)
-                conn_sub_server((indi[0], int(indi[1])), amand[3])
-            elif amand[1] == 'serve':
-                amand.append(1000)
-                subprocess.call(f'python3 {amand[2]} {amand[3]}')
-        except:
-            print('correct usage: stream connect ip:port request\n') 
+        with open('input_log', 'a') as f:
+            f.write(command)
         
-    
-    elif prom == 'pkg':
-        if ' install ' in command:
-            requ = command.replace('pkg install ', '')
-            subprocess.call(f"cd Pakages&git clone https://github.com/{requ}.git", shell = True)
-    
-    elif prom == 'lemmesee':
-        for i in dir():
-            if not ('elp' in i or i == 'backup'):
-                if 'all' in command:
-                    print(f'{i}: {globals()[i]}')
-                elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
-                    print(f'{i}: {globals()[i]}')
-    
-    elif prom == 'file':
+        if command == 'wiki':
+            webopen('https://github.com/umanochiocciola/kane/wiki')
+        
+        elif command == 'quit' or command == '!quit':
+            sys.exit()
+        
+        elif command in collegamenti:
+            subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
+            
+        elif prom == 'short':
+            faccherini = command.replace('short ', '').replace(amand[1]+' ', '').split(',')
+            collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
+            with open(f'shortcuts.dat', 'wb') as f:
+                pk.dump([collegamenti, ''], f, protocol=2)
+        
+        elif prom == 'stream':
+            try:
+                if amand[1] == 'connect':
+                    indi = amand[2].split(':')
+                    indi.append(1000)
+                    conn_sub_server((indi[0], int(indi[1])), amand[3])
+                elif amand[1] == 'serve':
+                    amand.append(1000)
+                    subprocess.call(f'python3 {amand[2]} {amand[3]}')
+            except:
+                print('correct usage: stream connect ip:port request\n') 
+            
+        
+        elif prom == 'pkg':
+            if ' install ' in command:
+                requ = command.replace('pkg install ', '')
+                subprocess.call(f"cd Pakages&git clone https://github.com/{requ}.git", shell = True)
+################################################################################# ci devi fà qualco'
+        elif prom == 'lemmesee':
+            print('lemmesee command is actually being revisited and it\'s not fully avaiable/functioning for this version of kane.')
+            for i in dir():
+                try:
+                    if not ('elp' in i or i == 'backup'):
+                        if 'all' in command:
+                            print(f'{i}: {globals()[i]}')
+                        elif not '__' in i and not 'function' in str(globals()[i]) and not 'module' in str(globals()[i]) and not 'InternalCommands' in i:
+                            print(f'{i}: {globals()[i]}')
+                except: 0
+##################################################################################
+        elif prom == 'file':
 
-        tg = amand[1]
-        try:
-            open(f'{directory}/{tg}', 'x')
-            print(f'created {tg}')
-        except:
-            print('[Kane Error 3] unable to create file')
-        continue
-    
-    elif prom == 'read':
-        try:
-            with open(f"{directory}/{command.replace('read ', '')}") as f:
-                print(f.read())
-        except:
-            print(f"Unable to open {command.replace('read ', '')}")
+            tg = amand[1]
+            try:
+                open(f'{directory}/{tg}', 'x')
+                print(f'created {tg}')
+            except:
+                print('[Kane Error 3] unable to create file')
+            continue
+        
+        elif prom == 'read':
+            try:
+                with open(f"{directory}/{command.replace('read ', '')}") as f:
+                    print(f.read())
+            except:
+                print(f"Unable to open {command.replace('read ', '')}")
 
-    elif prom == 'start':
-        try:
-            os.startfile(directory + '/' + amand[1].replace('*', directory))
-        except:
+        elif prom == 'start':
             try:
                 os.startfile(amand[1].replace('*', directory))
             except:
-                print('file not found')
-    elif command == 'cs':
-        subprocess.call(cs, shell=True)
-    
-    elif command == 'password' or command == 'pwd':
-        print(f'Changing password for {user}')
-        passw = input('$:>')
-        with open(f'{directory}/usrs/{username}/UserData.dat', 'wb') as f:
-            pk.dump([passw, LAST_CHECKED], f, protocol=2)
-            print(f'saved succesfully!\n')
+                try:
+                    os.startfile(amand[1].replace('*', directory))
+                except:
+                    print('file not found')
+        elif command == 'cs':
+            subprocess.call(cs, shell=True)
         
-            
-    elif prom == 'makedir':
-        dar = amand[1]
-        if not '/' in dar:
-            dar = f'{directory}/{dar}'
-        if not os.path.exists(dar):
-            os.makedirs(dar)
-            print(f'{dar} succesfully created!')
-    
-    elif command == 'home':
-        directory = f'{str(pathlib.Path().absolute())}/usrs/{user}'
-    
-    elif prom == 'man':
-        com = amand[1]
-        try:
-            man = open(f'Manual/{com}.txt', 'r')
-            print(man.read())
-            man.close()
-        except:
-            print(f'There\'s no manual for {com}')
-        
-    elif command == 'dir' or command == 'ls':
-        for file in glob.glob(f'{directory}/*'):
-            print(file.replace(f'{directory}', '').replace(directory.replace('/', '\\'), ''))
-            
-    elif prom == 'dir':
-        arg = amand[1]
-        for file in glob.glob(f'{directory}*.{arg}'):
-            print(file.replace(f'{directory}', ''))
-            
-    elif prom == 'ls':
-        arg = amand[1]
-        for file in glob.glob(f'{directory}/*.{arg}'):
-            print(file.replace(f'{directory}/', '').replace(directory.replace('/', '\\') + '/', ''))
-            
-    elif prom == 'web':
-        we = amand[1]
-        try:
-            webopen(we)
-            print(f'opening {we} ...')
-        except:
-            print('Unable to connect to the website, try to check internet connession')
-            
-    elif command == 'update':
-        subprocess.call("pip install pygame", shell = True)
-        
-        try:
-            with open('UserData.dat', 'wb') as f:
+        elif command == 'password' or command == 'pwd':
+            print(f'Changing password for {user}')
+            passw = input('$:>')
+            with open(f'{root}/usrs/{username}/UserData.dat', 'wb') as f:
                 pk.dump([passw, LAST_CHECKED], f, protocol=2)
-                print(f'saved succesfully!')
-            if passw != '':
-                if input(f'{user}\'s password: ') == passw:
-                    print('Welcome!')
-                else:
-                    sys.exit()
-        except:
-            print('[Kane error 2]: Error while saving data. Please reboot Kane or install it again.')
-        
-    elif command == 'upgrade':
-        print('installing new version on /kane')
-        subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
-        print('\nDone. Overwrite /kane/MainKane files on your MainKane folder.')
-        print('\n')
-        with open(f"{root}/kane/README.txt") as f:
-                print(f.read())
-        
-    elif 'cd' in command:
-        if command.replace("cd","") == '..':
-            directory = cd_punto(directory)
-        elif '/' in command:
-            ghen = command.replace("cd ","").replace("*", directory)
-            if os.path.exists(ghen):
-                directory = ghen
-            else:
-                print(f'can\'t jump to {ghen} : directory doesn\'t exist')
-        else:
-            ghen = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
-            if os.path.exists(ghen):
-                directory = ghen
-            else:
-                print(f'can\'t jump to {ghen} : directory doesn\'t exist')
+                print(f'saved succesfully!\n')
             
-    elif prom == 'py':
-        try:
-            exec(command.replace('py ', ''))
-        except:
-            print('\n\n+=====================================+\n')
-            traceback.print_exc(limit=None, file=None, chain=True)
-            print('\n+=======================================+\n')
-    else:
-        ab = InternalCommands.get(command, 'fuc')
-        if ab == 'fuc':
-            plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-            if plot.stderr == b'':
-                subprocess.call(f'cd {directory}{monnezza}{command}', shell=True)
-                if reprint_stdout: print(f'output: {str(plot.stdout)}')
+                
+        elif prom == 'makedir':
+            dar = amand[1]
+            if not '/' in dar:
+                dar = f'{directory}/{dar}'
+            if not os.path.exists(dar):
+                os.makedirs(dar)
+                print(f'{dar} succesfully created!')
+        
+        elif command == 'home':
+            directory = f'{str(pathlib.Path().absolute())}/usrs/{user}'
+        
+        elif prom == 'man':
+            com = amand[1]
+            try:
+                man = open(f'Manual/{com}.txt', 'r')
+                print(man.read())
+                man.close()
+            except:
+                print(f'There\'s no manual for {com}')
+            
+        elif command == 'dir' or command == 'ls':
+            for file in glob.glob(f'{directory}/*'):
+                print(file.replace(f'{directory}', '').replace(directory.replace('/', '\\'), ''))
+                
+        elif prom == 'dir':
+            arg = amand[1]
+            for file in glob.glob(f'{directory}*.{arg}'):
+                print(file.replace(f'{directory}', ''))
+                
+        elif prom == 'ls':
+            arg = amand[1]
+            for file in glob.glob(f'{directory}/*.{arg}'):
+                print(file.replace(f'{directory}/', '').replace(directory.replace('/', '\\') + '/', ''))
+                
+        elif prom == 'web':
+            we = amand[1]
+            try:
+                webopen(we)
+                print(f'opening {we} ...')
+            except:
+                print('Unable to connect to the website, try to check internet connession')
+                
+        elif command == 'update':
+            subprocess.call("pip install pygame", shell = True)
+            
+            try:
+                with open('UserData.dat', 'wb') as f:
+                    pk.dump([passw, LAST_CHECKED], f, protocol=2)
+                    print(f'saved succesfully!')
+                if passw != '':
+                    if input(f'{user}\'s password: ') == passw:
+                        print('Welcome!')
+                    else:
+                        sys.exit()
+            except:
+                print('[Kane error 2]: Error while saving data. Please reboot Kane or install it again.')
+            
+        elif command == 'upgrade':
+            print('installing new version on /kane')
+            subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
+            print('\nDone. Overwrite /kane/MainKane files on your MainKane folder.')
+            print('\n')
+            with open(f"{root}/kane/README.txt") as f:
+                    print(f.read())
+            
+        elif 'cd' in command:
+            if command.replace("cd","") == '..':
+                directory = cd_punto(directory)
+            elif '/' in command:
+                ghen = command.replace("cd ","").replace("*", directory)
+                if os.path.exists(ghen):
+                    directory = ghen
+                else:
+                    print(f'can\'t jump to {ghen} : directory doesn\'t exist')
             else:
-                if show_stderr: print(plot.stderr)
-                print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system\n or an error occured while executing external command')
+                ghen = f'{directory}/{command.replace("cd ","").replace("*", directory)}'
+                if os.path.exists(ghen):
+                    directory = ghen
+                else:
+                    print(f'can\'t jump to {ghen} : directory doesn\'t exist')
+                
+        elif prom == 'py':
+            try:
+                exec(command.replace('py ', ''))
+            except:
+                print('\n\n+=====================================+\n')
+                traceback.print_exc(limit=None, file=None, chain=True)
+                print('\n+=======================================+\n')
         else:
-            exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
+            ab = InternalCommands.get(command, 'fuc')
+            if ab == 'fuc':
+                plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stderr = subprocess.PIPE)
+                if plot.stderr == b'':
+                    print('\nexternal command executed with no errors :{D')
+                else:
+                    if attributes.get('show_stderr', 0): print(plot.stderr)
+                    print(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system\n or an error occured while executing external command')
+            else:
+                exec(InternalCommands.get(command, "print('Uknown Internal, directoryect or external command.')"))
     print('   ')
+
+while True: pull(input(f'{directory} ## {username} $~ '))
 
