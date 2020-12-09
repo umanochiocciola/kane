@@ -17,6 +17,9 @@ Setup:
 
 CHANGELOG:
    # Version 2.0.8.7.7
+    @ moddellized stout&stderr for every command, now the pull function will return an object like this
+    	output.|stdout
+	       |stderr
     @ now kane is a python function: kanescript coming soon
    # Version 2.0.9.7.7-
     @ added sysconfig options to tweak around yor kane.
