@@ -16,7 +16,11 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
-   # Version 2.0.8.7.7
+   # Version 2.0.9.7.8
+    @ Fixed issues:
+    	- Password now encripted. (Encription module made from scratch, compiled for security reasons)
+	- InputLog now saves input on newline.
+   # Version 2.0.9.7.7
     @ moddellized stout&stderr for every command, now the pull function will return an object like this
     	output.|stdout
 	       |stderr
