@@ -181,8 +181,9 @@ def pull(command):
         amand = command.split()
         prom = amand[0]
         
-        with open('input_log', 'a') as f:
-            f.write(command)
+        if attributes.get('do_input_log', 0):
+            with open('input_log', 'a') as f:
+                f.write(f'{command}\n')
         
         if command == 'wiki':
             webopen('https://github.com/umanochiocciola/kane/wiki')
