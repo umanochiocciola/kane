@@ -15,7 +15,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.7'
+version = '2.0.9.7.8'
 
 sys_host = 'unknown'
 if os.name == 'posix':
