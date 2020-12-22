@@ -56,3 +56,5 @@ What's Kane?
 Open Source Notes:
     This is a full open source. This means than you have free access to the project and its source code.
     If you paid for this pretend a refund!
+
+If you're doing any treasure hunt, the password will always be: cheese
