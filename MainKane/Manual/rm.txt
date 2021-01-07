@@ -1,0 +1,18 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          remove
+change <placeholder> with an argument
+
+Usage:
+	rm -<optional: d(rectory)> <target>
+
+Types of argument:
+	-d: remove directory
+
+	name of file/dirctory to remove
+
+Example:
+	rm foo.txt
+	rm -d MyFolder
