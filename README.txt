@@ -20,6 +20,7 @@ CHANGELOG:
     @ Improved terminal interface
     	- added colored text
     @ pkg fixed (use man pkg to get further information)
+    @ added rm command to delete files and folder
    # Version 2.0.9.7.8
     @ Fixed issues:
     	- Password now encripted. (Encription module made from scratch, compiled for security reasons)
