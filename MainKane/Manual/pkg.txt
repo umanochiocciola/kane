@@ -6,11 +6,15 @@
 change <placeholder> with an argument
 
 Usage:
-	pkg <author>/<package name>
+	pkg -<optional: method> <author>/<package name>
 
 Types of argument:
+	method:
+		-p: pip
+		-g: git
+		none: direct
 	author of a package
 	package name
 
 Example:
-	package umanochiocciola/platformer
+	pkg -g umanochiocciola/platformer
