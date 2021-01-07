@@ -16,6 +16,10 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+   # Version 2.0.9.8
+    @ Improved terminal interface
+    	- added colored text
+    @ pkg fixed (use man pkg to get further information)
    # Version 2.0.9.7.8
     @ Fixed issues:
     	- Password now encripted. (Encription module made from scratch, compiled for security reasons)
