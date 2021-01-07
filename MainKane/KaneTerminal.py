@@ -22,7 +22,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.8'
+version = '2.0.9.7.8'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -259,10 +259,10 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
                 subprocess.call(f"cd {root}/Pakages{monnezza}git clone https://github.com/{requ}.git", shell = True)
             elif ' -p ' in command:
                 requ = command.replace('pkg ', '').replace(' -p ', '')
-                subprocess.call(f"cd {root}/Pakagess{monnezza}pip install {requ}", shell = True)
+                subprocess.call(f"cd {root}/Pakages{monnezza}pip install {requ}", shell = True)
             else:
                 requ = command.replace('pkg ', '')
-                subprocess.call(f'cd {root}/Pakagess{monnezza}curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)                
+                subprocess.call(f'cd {root}/Pakages{monnezza}curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)                
 ################################################################################# ci devi fà qualco'
         elif prom == 'lemmesee':
             STDOUT.append('lemmesee command is actually being revisited and it\'s not fully avaiable/functioning for this version of kane.')
