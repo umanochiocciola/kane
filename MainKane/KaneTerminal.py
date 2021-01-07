@@ -1,3 +1,5 @@
+import modules_check
+print('loading components...')
 import subprocess
 import socket
 import sys
@@ -8,8 +10,13 @@ import glob
 import pickle as pk
 import traceback
 import urllib.request
+from urllib.request import urlopen
+import urllib
 from datetime import date
 import Encription as enc
+import threading as thr
+import colorama
+from termcolor import colored
 
 today = date.today()
 DATE = today.strftime("%d/%m/%Y")
@@ -26,6 +33,8 @@ else:
     monnezza = '&'
     cs = 'cls'
     sys_host = 'win/DOS'
+
+subprocess.call(cs, shell=True)
 
 try:
     import ctypes
@@ -73,7 +82,7 @@ if LAST_CHECKED != DATE:
     fp = urllib.request.urlopen("https://raw.githubusercontent.com/umanochiocciola/kane/main/version.txt")
     mybytes = fp.read()
     fp.close()
-    latest = str(mybytes.decode("utf8"))
+    latest = mybytes.decode("utf8").replace('\n', '')
     print(f'Your version: {version}')
     print(f'Latest version avaiable: {latest}\n')
     
@@ -95,6 +104,18 @@ InternalCommands = {
 }
 
 '''geeky stuff'''
+def dirlist(folder):
+    webopen('file:///'+folder)
+
+def priv_ip():
+    ip = socket.gethostbyname(socket.gethostname())
+    return(ip)
+
+def pub_ip():
+    import re
+    data = str(urlopen('http://checkip.dyndns.com/').read())
+    return(re.compile(r'Address: (\d+.\d+.\d+.\d+)').search(data).group(1))
+
 def scream():
     try:
         print('\aWhoo')
@@ -147,23 +168,29 @@ try:
 except:
     print('error while opening sysconfig.conf')
     with open('sysconfig.conf', 'x') as f:
-        f.write('# edit this to configurate your kane os\nshow_stderr = 0\nreprint_stdout = 0\ndo_input_log = 0')
-    attributes.update({'show_stderr': 0, 'do_input_log': 0})
+        f.write("# edit this to configurate your kane os{'show_stderr': 1}{'do_input_log': 1}{'max_threads': 10}{'deamon_stdout': 1}{'deamon_stderr': 0}")
+    attributes.update({'show_stderr': 0, 'do_input_log': 0, 'max_threads': 10, 'deamon_stdout': 1, 'deamon_stderr': 0})
     
 ################################################################
 
 class NiceLittleOutput:
-    def __init__(self, stdout, stderr):
+    def __init__(self, stdout, stderr, stdcolor):
         self.stdout = stdout
         self.stderr = stderr
+        self.stcolor = stdcolor
 
+deamons = []
 
-def pull(command):
-    global backup, username, user, colegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, directory, syshost, cs, monnezza
-    
+def pull(command, backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza, isdeamon=0):
+    global directory
     STDOUT = []
     STDERR = []
+    stdout_color = ['white', 'on_grey']
     
+    for deam in deamons:
+        if not deam.is_alive():
+            deamons.remove(deam)
+        
     for matteobandiera in [0]:
         if backup != username:
             STDOUT.append(f'User discrepancy detected: restoring last authorized user ({username})')
@@ -181,6 +208,7 @@ def pull(command):
         amand = command.split()
         prom = amand[0]
         
+        
         if attributes.get('do_input_log', 0):
             with open('input_log', 'a') as f:
                 f.write(f'{command}\n')
@@ -193,7 +221,19 @@ def pull(command):
         
         elif command in collegamenti:
             subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
-            
+        
+        elif prom == 'deamon':
+            if len(deamons) <= attributes.get('max_threads', 10):
+                deamons.append(thr.Thread(target = pull, args=(command.replace('demon ', ''), backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, directory, sys_host, cs, monnezza, 1)))
+                deamons[len(deamons)-1].start()
+            else:
+                print('Max thread count reached. To cahnge this edit max_threads in sysconfig.conf')
+        
+        elif command == 'dirlist': dirlist(directory)
+        
+        elif command == 'ip':
+            STDOUT.append(f'basic ip informations:\nlocalhost:\t127.0.0.1\nprivate ip:\t{priv_ip()}\npublic ip:\t{pub_ip()}')
+        
         elif prom == 'short':
             faccherini = command.replace('short ', '').replace(amand[1]+' ', '').split(',')
             collegamenti.update({amand[1]: f'cd {faccherini[0]}{monnezza}{faccherini[1]}'})
@@ -205,27 +245,24 @@ def pull(command):
                 if amand[1] == 'connect':
                     indi = amand[2].split(':')
                     indi.append(1000)
-                    conn_sub_server((indi[0], int(indi[1])), amand[3])
+                    conn_sub_server((indi[0], int(indi[1])), amand[3].replace('_', ' '))
                 elif amand[1] == 'serve':
                     amand.append(1000)
-                    subprocess.call(f'python3 {amand[2]} {amand[3]}')
+                    subprocess.call(f'python {amand[2]} {amand[3]}')
             except:
                 STDERR.append('correct usage: stream connect ip:port request\n') 
             
         
         elif prom == 'pkg':
-            if 1:
-                if ' -g ' in command:
-                    requ = command.replace('pkg ', '').replace(' -git ', '')
-                    subprocess.call(f"cd {root}/Pakages&git clone https://github.com/{requ}.git", shell = True)
-                elif ' -p ' in command:
-                    requ = command.replace('pkg ', '').replace(' -p ', '')
-                    subprocess.call(f"cd {root}/Pakages&pip install {requ}", shell = True)
-                else:
-                    requ = command.replace('pkg ', '')
-                    subprocess.call(f'cd {root}/Pakages&curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)
-                    
-                
+            if ' -g ' in command:
+                requ = amand[len(amand)-1]
+                subprocess.call(f"cd {root}/Pakages{monnezza}git clone https://github.com/{requ}.git", shell = True)
+            elif ' -p ' in command:
+                requ = command.replace('pkg ', '').replace(' -p ', '')
+                subprocess.call(f"cd {root}/Pakagess{monnezza}pip install {requ}", shell = True)
+            else:
+                requ = command.replace('pkg ', '')
+                subprocess.call(f'cd {root}/Pakagess{monnezza}curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)                
 ################################################################################# ci devi fà qualco'
         elif prom == 'lemmesee':
             STDOUT.append('lemmesee command is actually being revisited and it\'s not fully avaiable/functioning for this version of kane.')
@@ -248,7 +285,7 @@ def pull(command):
                 STDERR.append('[Kane Error 3] unable to create file')
             continue
         
-        elif prom == 'kanescript':
+        elif prom == 'kanescript' or prom == 'ks':
             try:
                 f = open(amand[1],'r')
                 ######################
@@ -260,6 +297,8 @@ def pull(command):
                         lofl = pull(i)
                         if lofl.stderr != '':
                             erz += 1
+                        else:
+                            print(lofl.stdout)
                     except:
                         print(f'Error at {i}\nmoving on...')
                         erx += 1
@@ -307,6 +346,7 @@ def pull(command):
         
         elif prom == 'man':
             com = amand[1]
+            stdout_color = ['cyan', 'on_blue']
             try:
                 man = open(f'Manual/{com}.txt', 'r')
                 STDOUT.append(man.read())
@@ -364,10 +404,10 @@ def pull(command):
                 
         elif prom == 'py':
             try:
-                exec(command.replace('py ', ''))
+                exec(command.replace('py ', ''))# ignore this first 3 lines if getting errors when using py command
             except:
                 STDERR.append('\n\n+=====================================+\n')
-                traceback.print_exc(limit=None, file=None, chain=True)
+                STDERR.append(traceback.format_exc())
                 STDERR.append('\n+=======================================+\n')
         else:
             
@@ -377,6 +417,7 @@ def pull(command):
             except:
                 ab = InternalCommands.get(command, 'fuc')
                 if ab == 'fuc':
+                    stdout_color[0] = 'yellow'
                     plot = subprocess.run(f'cd {directory}{monnezza}{command}', shell=True, stderr = subprocess.PIPE)
                     if plot.stderr == b'':
                         STDOUT.append('\nexternal command executed with no errors :{D')
@@ -392,9 +433,14 @@ def pull(command):
     for er in STDERR: stderr += f'{er}\n'
     if not attributes.get('show_stderr', 0): stderr = 'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system\n or an error occured while executing external command'
     
-    return(NiceLittleOutput(stdout, stderr))
+    return(NiceLittleOutput(stdout, stderr, stdout_color,))
 
+colorama.init()
 while True:
-    foffi = pull(input(f'{directory} ## {username} $~ '))
-    print(foffi.stdout + '\n' + foffi.stderr)
-
+    try:
+        foffi = pull(input(colored(f'{directory} ## {username} $~ ', 'green')), backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza)
+        print(colored(foffi.stdout, foffi.stcolor[0], foffi.stcolor[1]) + '\n' + colored(foffi.stderr, 'red'))
+    except SystemExit:
+        sys.exit()
+    except:
+        print(colored(F'Error: your command caused this process to crash.\n', 'yellow', 'on_red'))
