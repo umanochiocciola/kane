@@ -5,7 +5,7 @@ import socket
 import sys
 import pathlib
 import webbrowser
-import os
+import os, shutil
 import glob
 import pickle as pk
 import traceback
@@ -22,7 +22,7 @@ today = date.today()
 DATE = today.strftime("%d/%m/%Y")
 LAST_CHECKED = DATE
 
-version = '2.0.9.7.8'
+version = '2.0.9.8'
 
 sys_host = 'unknown'
 if os.name == 'posix':
@@ -59,39 +59,45 @@ root = directory = str(pathlib.Path().absolute()).replace('\\', '/')
 passw = ''
 elp = "Kane 2.0 terminal manual: \n list of internal commands\n   type wiki to get more information. \n\n start:  open a program \n quit: quit terminal \n web open a URL in browser\n !helpKane OR help:  get this list ;)\n cd: jump to a directoryectory\n directory OR ls: list files in the folder\nupgrade: Upgrade kane version\n man <command>: read further informations about a command\n While giving a path, you can use * to referr to the current directoryectory\n makedirectory <directory>: create a directoryectory at the specified path.\n py <python command>: execute python line\n home: jump to home user folder"
 
-username = input('$ Username: ')
-if os.path.exists(f'{directory}/usrs/{username}'):
-    with open(f'{directory}/usrs/{username}/UserData.dat', 'rb') as f:
-        passw, LAST_CHECKED = pk.load(f)
-        passw = enc.decript(passw, 12)
-    if passw != '':
-        while input(f'{username}\'s password: ') != passw:
-            print('wrong password.\n')
-        print('Welcome')
-else:
-    print('creating user...')
-    os.makedirs(f'{directory}/usrs/{username}')
-    with open(f'{directory}/usrs/{username}/UserData.dat', 'wb') as f:
-        pk.dump([enc.encript(passw, 12), LAST_CHECKED], f, protocol=2)
+if __name__ == '__main__':
+    username = input('$ Username: ')
+    if os.path.exists(f'{directory}/usrs/{username}'):
+        with open(f'{directory}/usrs/{username}/UserData.dat', 'rb') as f:
+            passw, LAST_CHECKED = pk.load(f)
+            passw = enc.decript(passw, 12)
+        if passw != '':
+    # NAISSSS
+            while input(f'{username}\'s password: ') != passw:
+                print('wrong password.\n')
+            print('Welcome')
+    else:
+        print('creating user...')
+        os.makedirs(f'{directory}/usrs/{username}')
+        with open(f'{directory}/usrs/{username}/UserData.dat', 'wb') as f:
+            pk.dump([enc.encript(passw, 12), LAST_CHECKED], f, protocol=2)
 
-if LAST_CHECKED != DATE:
-    print('+==================+')
-    print('|Daily update check|')
-    print('+==================+\n')
-    
-    fp = urllib.request.urlopen("https://raw.githubusercontent.com/umanochiocciola/kane/main/version.txt")
-    mybytes = fp.read()
-    fp.close()
-    latest = mybytes.decode("utf8").replace('\n', '')
-    print(f'Your version: {version}')
-    print(f'Latest version avaiable: {latest}\n')
-    
-    if version != latest: print('If you want to update, use the   upgrade   command')
-    else: print('Congrats! You have the latest version')
-    LAST_CHECKED = DATE
 
-with open(f'{str(pathlib.Path().absolute())}/usrs/{username}/UserData.dat', 'wb') as f:
-        pk.dump([enc.encript(passw, 12), LAST_CHECKED], f, protocol=2)
+
+    if LAST_CHECKED != DATE:
+        print('+==================+')
+        print('|Daily update check|')
+        print('+==================+\n')
+        
+        fp = urllib.request.urlopen("https://raw.githubusercontent.com/umanochiocciola/kane/main/version.txt")
+        mybytes = fp.read()
+        fp.close()
+        latest = mybytes.decode("utf8").replace('\n', '')
+        print(f'Your version: {version}')
+        print(f'Latest version avaiable: {latest}\n')
+        
+        if version != latest: print('If you want to update, use the   upgrade   command')
+        else: print('Congrats! You have the latest version')
+        LAST_CHECKED = DATE
+
+    with open(f'{str(pathlib.Path().absolute())}/usrs/{username}/UserData.dat', 'wb') as f:
+            pk.dump([enc.encript(passw, 12), LAST_CHECKED], f, protocol=2)
+
+else: username='external'
 
 InternalCommands = {
     'test': "print('it works!')",
@@ -162,7 +168,7 @@ try:
             except:
                 try: exec(i)
                 except:
-                    try: pull(i)
+                    try: pull(i, ARGS)
                     except: 0
 
 except:
@@ -180,12 +186,15 @@ class NiceLittleOutput:
         self.stcolor = stdcolor
 
 deamons = []
+playground = {}
 
-def pull(command, backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza, isdeamon=0):
-    global directory
+def pull(command, ARGS, isdeamon=0):
+    global directory, playground
     STDOUT = []
     STDERR = []
     stdout_color = ['white', 'on_grey']
+    
+    backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza = ARGS
     
     for deam in deamons:
         if not deam.is_alive():
@@ -206,6 +215,7 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
 
         if command == '': continue
         amand = command.split()
+        for i in amand: i = i.replace('_', ' ')
         prom = amand[0]
         
         
@@ -221,6 +231,43 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
         
         elif command in collegamenti:
             subprocess.call(collegamenti.get(command, 'echo fac?'), shell=True)
+        
+        elif prom == 'rename':
+            if len(amand) < 3:
+                STDERR.append('error: rename:\nUsage: rename OLD NEW')
+            else:
+                os.rename(amand[1], amand[2])
+        
+        
+        elif prom == 'pg':
+            if len(amand) == 1: print(playground)
+            elif amand[1] == 'clear': playground = {}
+            elif amand[1] == 'new':
+                if amand[3] == 'list': obj = []
+                elif amand[3] == 'dict': obj = {}
+                elif amand[3] == 'py': obj = exec(amand[4])
+                else: obj = amand[3]
+                playground.update({amand[2]: obj})
+            elif amand[1] == 'play':
+                print(pull(playground.get(amand[2], 'py print("It doesn\'t exist")'), (backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza), isdeamon=0).stdout)
+            elif amand[1] == 'exec':
+                for i in playground[amand[2]]: print(pull(i, (backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza), isdeamon=0).stdout)
+            elif amand[1] == 'read':
+                print(playground.get(amand[2], 'no.'))
+            elif amand[1] == 'app':
+                playground[amand[2]].append(amand[3])
+            elif amand[1] == 'rm':
+                playground.update({amand[2]: None})
+        
+        elif prom == 'rm':
+            if amand[1] == '-d':
+                shutil.rmtree(f'{directory}/{amand[2]}')
+            else:
+                poe = f'{directory}/{amand[1]}'
+                if os.path.exists(poe):
+                    os.remove(poe)
+                else:
+                    print(f"{amand[2]} doesn't exist")
         
         elif prom == 'deamon':
             if len(deamons) <= attributes.get('max_threads', 10):
@@ -256,13 +303,14 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
         elif prom == 'pkg':
             if ' -g ' in command:
                 requ = amand[len(amand)-1]
-                subprocess.call(f"cd {root}/Pakages{monnezza}git clone https://github.com/{requ}.git", shell = True)
+                subprocess.call(f"cd {root}/Packages{monnezza}git clone https://github.com/{requ}.git", shell = True)
             elif ' -p ' in command:
-                requ = command.replace('pkg ', '').replace(' -p ', '')
-                subprocess.call(f"cd {root}/Pakages{monnezza}pip install {requ}", shell = True)
+                requ = amand[len(amand)-1]
+                subprocess.call(f"cd {root}/Packages{monnezza}pip install {requ}", shell = True)
             else:
                 requ = command.replace('pkg ', '')
-                subprocess.call(f'cd {root}/Pakages{monnezza}curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)                
+                subprocess.call(f'cd {root}/Packages{monnezza}curl {requ} -o {requ.split("/")[len(requ.split("/"))-1]}', shell=True)                
+
 ################################################################################# ci devi fà qualco'
         elif prom == 'lemmesee':
             STDOUT.append('lemmesee command is actually being revisited and it\'s not fully avaiable/functioning for this version of kane.')
@@ -285,27 +333,7 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
                 STDERR.append('[Kane Error 3] unable to create file')
             continue
         
-        elif prom == 'kanescript' or prom == 'ks':
-            try:
-                f = open(amand[1],'r')
-                ######################
-                prog = f.readlines()
-                erz = 0
-                for i in prog:
-                    i = i.replace('\n', '')
-                    try:
-                        lofl = pull(i)
-                        if lofl.stderr != '':
-                            erz += 1
-                        else:
-                            print(lofl.stdout)
-                    except:
-                        print(f'Error at {i}\nmoving on...')
-                        erx += 1
-                print(f'program finished with {erz} error(s)')
-                ######################
-            except:
-                STDERR.append(f'unable to open {amand[1]}')
+        #elif prom == 'kanescript' or prom == 'ks':
         
         elif prom == 'read':
             try:
@@ -382,9 +410,13 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
         elif command == 'upgrade':
             STDOUT.append('installing new version on /kane')
             subprocess.call("git clone https://github.com/umanochiocciola/kane.git", shell = True)
-            STDOUT.append('\nDone. Overwrite /kane/MainKane files on your MainKane folder.\n')
+
+            
             with open(f"{root}/kane/README.txt") as f:
                     STDOUT.append(f.read())
+            
+            STDOUT.append('\nDone. Overwrite /kane/MainKane files on your MainKane folder.\n')
+            STDOUT.append('updated succesfully')
             
         elif 'cd' in command:
             if command.replace("cd","") == '..':
@@ -410,10 +442,8 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
                 STDERR.append(traceback.format_exc())
                 STDERR.append('\n+=======================================+\n')
         else:
-            
             try:
-                try: subprocess.call(f'cd Pakages&python3 {command}.py')
-                except: subprocess.call(f'cd Pakages&python {command.split(" ")[0]}.py {command.replace(command.split(" ")[0], "")}')
+                exec(f'from Packages.{prom} import main; main.{amand[1]}({amand})')
             except:
                 ab = InternalCommands.get(command, 'fuc')
                 if ab == 'fuc':
@@ -425,8 +455,8 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
                         STDERR.append(plot.stderr)
                         STDERR.append(f'Kane shell error: {prom}: doesn\'t exist neither in kane nor in your host system\n or an error occured while executing external command')
                 else:
-                    exec(InternalCommands.get(command, "STDERR.append('Uknown Internal, directoryect or external command.')"))
-    
+                    exec(InternalCommands.get(command, "STDERR.append('Uknown Internal, direct or external command.')"))
+
     stdout = ''
     stderr = ''
     for ou in STDOUT: stdout += f'{ou}\n'
@@ -436,11 +466,12 @@ def pull(command, backup, username, user, deamons, collegamenti, attributes, Int
     return(NiceLittleOutput(stdout, stderr, stdout_color,))
 
 colorama.init()
-while True:
-    try:
-        foffi = pull(input(colored(f'{directory} ## {username} $~ ', 'green')), backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza)
-        print(colored(foffi.stdout, foffi.stcolor[0], foffi.stcolor[1]) + '\n' + colored(foffi.stderr, 'red'))
-    except SystemExit:
-        sys.exit()
-    except:
-        print(colored(F'Error: your command caused this process to crash.\n', 'yellow', 'on_red'))
+if __name__ == '__main__':
+    while True:
+        try:
+            foffi = pull(input(colored(f'{directory} ## {username} $~ ', 'green')), (backup, username, user, deamons, collegamenti, attributes, InternalCommands, passw, LAST_CHECKED, elp, root, sys_host, cs, monnezza))
+            print(colored(foffi.stdout, foffi.stcolor[0], foffi.stcolor[1]) + '\n' + colored(foffi.stderr, 'red'))
+        except SystemExit:
+            sys.exit()
+        except:
+            print(colored(F'Error: your command caused this process to crash.\n', 'yellow', 'on_red'))

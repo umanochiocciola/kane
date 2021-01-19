@@ -1,0 +1,16 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          ip
+change <placeholder> with an argument
+
+gives ip informations
+
+Usage:
+	ip
+Types of argument:
+	none
+
+Example:
+	ip

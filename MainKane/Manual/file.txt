@@ -1,0 +1,20 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          file
+change <placeholder> with an argument
+
+creates the specified file
+
+Usage:
+	file <directory_path>\<filename.***>
+	file <filename.***>
+
+Types of argument:
+	Full path of a file
+	Just the name of a file in the directory
+
+Example:
+	file lol.c
+	file MyGames/pong.py

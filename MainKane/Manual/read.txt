@@ -1,0 +1,20 @@
++===========================================================+
+|                      -Kane Manual-                        |
++===========================================================+
+
+                          read
+change <placeholder> with an argument
+reads the specified file
+
+Usage:
+	read <directory_path>\<filename.***>
+	read <filename.***>
+
+Types of argument:
+	Full path of a file
+	Just the name of a file in the directory
+
+Example:
+	read lol.c
+	read C:/javascript/phishing.html
+	read kane/README.txt
