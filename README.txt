@@ -17,6 +17,10 @@ Setup:
 
 CHANGELOG:
    # Version 2.0.9.8
+    @ added playground (pg), manual soon
+    @ fixed a bunch of bugs
+    @ added rename command
+   # Version 2.0.9.8
     @ Improved terminal interface
     	- added colored text
     @ pkg fixed (use man pkg to get further information)
