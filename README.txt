@@ -16,6 +16,9 @@ Setup:
     On linux, I suggest to place MainKane in /home folder. 
 
 CHANGELOG:
+   # Version 2.1
+    @ added desktop enviroment!
+    @ fixed a bunch of bugs
    # Version 2.0.9.8
     @ added playground (pg), manual soon
     @ fixed a bunch of bugs
