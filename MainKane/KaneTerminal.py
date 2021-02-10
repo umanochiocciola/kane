@@ -20,7 +20,7 @@ from termcolor import colored
 
 
 if 1: ##
-    version = '2.0.9.8'
+    version = '2.0.3'
 
     sys_host = 'unknown'
     if os.name == 'posix':
